@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Consumer Complaint Registration</title>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      margin: 15px 0;
+      font-weight: 400;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 3px;
+      }
+      form {
+      width: 100%;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 5px #ccc; 
+      }
+      input, select, textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input:hover, select:hover, textarea:hover {
+      outline: none;
+      border: 1px solid #095484;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+      }
+      textarea {
+      width: calc(100% - 6px);
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      }
+      .item i, input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #a9a9a9;
+      }
+      .item i {
+      right: 2%;
+      top: 30px;
+      z-index: 1;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+      right: 1%;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+      }
+      .btn-block {
+      margin-top: 20px;
+      text-align: center;
+      }
+      button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      -webkit-border-radius: 5px; 
+      -moz-border-radius: 5px; 
+      border-radius: 5px; 
+      background-color: #095484;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background-color: #0666a3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testbox" id="registration">
+      <form action="#" method="post">
+        <h1>Consumer Complaint Registration</h1>
+        <h5 id="error" style="color: red;" >
+          
+        </h5>
+        <div class="item">
+          <p>Your name</p>
+          <div>
+            <input id="firstName" type="text" name="name" placeholder="First" />
+            <input id="lastName" type="text" name="name" placeholder="Last" />
+          </div>
+        </div>
+        <div class="item">
+          <p>Your email</p>
+          <input id="email" type="text" name="email"/>
+        </div>
+        <div class="item">
+          <p>Date of complaint (if complaint already registered with company)</p>
+          <input id="date" type="date" name="name" />
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="item">
+          <p>Company Name</p>
+          <input id="companyName" type="text" name="name"/>
+        </div>
+        <div class="item">
+          <p>State</p>
+          <select id="state">
+            <option value="">*Please select*</option>
+            <option value="CA">CA</option>
+            <option value="FL">FL</option>
+            <option value="TX">TX</option>
+            <option value="NY">NY</option>
+            <option value="GA">GA</option>
+          </select>
+        </div>
+        <div class="item">
+          <p>Zipcode</p>
+          <input id="zipcode" type="text" name="name" style="width:25%;"/>
+        </div>
+        <div class="item">
+          <p>Issue Overview</p>
+          <input type="text" name="name" id="issue" style="width: 500px;height: 50px;"/>
+          <a href="#" id="getProduct">Get Category</a>
+        </div>
+        <div class="item">
+          <p>Category</p>
+          <input id="category" type="text" name="name"/>
+          <h5 id="productNotFound" style="color: red;" >
+          </h5>
+        </div>
+        <div class="item">
+          <p>Explain the Issue</p>
+          <textarea rows="5" id="issueDesc"></textarea>
+        </div>
+        <div class="btn-block">
+          <button id="formSubmit" type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+    <div id="registered">
+      <h1 style="color: green;">Complaint has successfully been registered</h1>
+    </div>
+  </body>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#error').hide();
+      $('#productNotFound').hide()
+      $('#registered').hide()
+    $('#formSubmit').bind("click",function(e){
+      e.preventDefault()
+       if(validate()){
+        $('#registration').hide()
+        $('#registered').show()
+       }
+});
+
+function validate(){
+  var firstName = $('#firstName').val();
+  var lastName = $('#lastName').val();
+  var email = $('#email').val();
+  var companyName = $('#companyName').val();
+  var state = $('#state').val();
+  var zipcode = $('#zipcode').val();
+  var issue = $('#issue').val();
+  var category = $('#category').val();
+  var issueDesc = $('#issueDesc').val();
+  if (firstName.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please enter the First Name");
+return false;
+  }
+  if (lastName.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please enter the Last Name");
+return false;
+  }
+  if (email.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please enter the Email");
+return false;
+  }
+  if (companyName.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please enter the Company Name");
+return false;
+  }
+  if (state.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please select the state");
+return false;
+  }
+  if (zipcode.length == '') {
+    $('#error').show();
+    $('#error').html
+("Please enter the zipcode");
+return false;
+  } else {
+    if(zipcode.length < 6){
+      $('#error').show();
+    $('#error').html
+    ("The zipcode must be minimum 6 characters");
+    return false;
+    }
+  }
+  if (issue.length == '') {
+    $('#error').show();
+    $('#error').html
+    ("Please enter the issue");
+return false;
+  }
+  if (category.length == '') {
+    $('#error').show();
+    $('#error').html
+    ("Please enter the category");
+return false;
+  }
+  if (issueDesc.length == '') {
+    $('#error').show();
+    $('#error').html
+    ("Please provide the description of the issue");
+return false;
+  }
+  return true;
+}
+
+$('#getProduct').click(function(e){
+    e.preventDefault();
+    console.log('hello');
+    $.ajax({
+         type:'POST',
+         url:'/getProduct',
+         data:{
+           issue:$("#issue").val()
+         },
+         success:function(data)
+         {
+          if(data){
+            console.log(data)
+          $('#category').val(data)
+         } else {
+          $('#productNotFound').show();
+          $('#productNotFound').html("Please enter the product")
+         }
+         }
+      })
+});
+
+
+});
+  </script>
+</html>

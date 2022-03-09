@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+    <title>Model Deployment</title>
+</head>
+
+<body>
+    <h1>Prediction of Product</h1>
+    <p>
+        Enter your Issue:
+    </p>
+    <form id="compliantForm" action="/" method="POST">
+        <input type="text" id="issue"  name="issue" placeholder="Issue">
+        <input type="submit" >
+    </form>
+
+</body>
+<script type="text/javascript">
+    $(document).on('submit','#compliantForm',function(e)
+                   {
+      console.log('hello');
+      e.preventDefault();
+      $.ajax({
+        type:'POST',
+        url:'/getProduct',
+        data:{
+          issue:$("#issue").val()
+        },
+        success:function(data)
+        {
+          console.log(data);
+        }
+      })
+    });
+  </script>
+</html>

@@ -18,7 +18,7 @@ from IPython.display import display
 from sklearn.metrics import confusion_matrix
 
 def prediction(str):
-    dataset = pd.read_csv('consumer_complaints.csv', dtype='unicode')
+    dataset = pd.read_csv('sampletest.csv', dtype='unicode')
     col = ['product', 'issue']
     dataset = dataset[col]
     dataset = dataset[pd.notnull(dataset['issue'])]

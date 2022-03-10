@@ -3,7 +3,7 @@ import built as b
 
 app = Flask(__name__)
 
-@app.route("/getProduct", methods = ["GET", "POST"])
+@app.route("/getProduct", methods = ["POST"])
 def hello():
 
     if request.method == "POST":
@@ -20,11 +20,6 @@ def displayIndex():
 
     return render_template("complaintform.html")
 
-# @app.route("/sub", methods = ['POST'])
-# def submit():
-#     if request.method == "POST":
-#         name = request.form["Issue"]
-#     return render_template("sub.html", n = name)
 
 if __name__ == "__main__":
     app.run(debug=True)

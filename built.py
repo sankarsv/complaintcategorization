@@ -18,7 +18,7 @@ from IPython.display import display
 from sklearn.metrics import confusion_matrix
 
 def prediction(str):
-    dataset = pd.read_csv('sampletest.csv', dtype='unicode')
+    dataset = pd.read_csv('sampled_complaints.csv', dtype='unicode')
     col = ['product', 'issue']
     dataset = dataset[col]
     dataset = dataset[pd.notnull(dataset['issue'])]
@@ -57,9 +57,9 @@ def prediction(str):
     for predicted in category_id_dataset.category_id:
         for actual in category_id_dataset.category_id:
             if predicted != actual and conf_mat[actual, predicted] >= 10:
-                print("'{}' predicted as '{}' : {} examples.".format(id_to_category[actual], id_to_category[predicted], conf_mat[actual, predicted]))
+                #print("'{}' predicted as '{}' : {} examples.".format(id_to_category[actual], id_to_category[predicted], conf_mat[actual, predicted]))
                 display(dataset.loc[indices_test[(y_test == actual) & (y_pred == predicted)]][['product', 'issue']])
-                print('')
+                #print('')
     model.fit(features, labels)
     N = 2
     for product, category_id in sorted(category_to_id.items()):
@@ -69,4 +69,4 @@ def prediction(str):
         bigrams = [v for v in reversed(feature_names) if len(v.split(' ')) == 2][:N]
 
     return clf.predict(count_vect.transform([str]))
-    return (metrics.classification_report(y_test, y_pred, target_names=dataset['product'].unique()))
+    #return (metrics.classification_report(y_test, y_pred, target_names=dataset['product'].unique()))

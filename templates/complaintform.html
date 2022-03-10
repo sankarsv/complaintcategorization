@@ -9,10 +9,40 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <style>
+    .overlay{
+    display: none;
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+  body.loading{
+    overflow: hidden;   
+  }
+  body.loading .overlay{
+    display: block;
+  }
       html, body {
       min-height: 100%;
       }
-      body, div, form, input, select, p { 
+      body, div, form, input, select, p {
       padding: 0;
       margin: 0;
       outline: none;
@@ -165,6 +195,11 @@
         </div>
       </form>
     </div>
+    <div class="overlay" 
+    style="margin-top: 144px;
+    margin-bottom: 30px;
+    margin-left: 47%;
+    margin-right: 30%;"></div>
     <div id="registered">
       <h1 style="color: green;">Complaint has successfully been registered</h1>
     </div>
@@ -174,8 +209,11 @@
       $('#error').hide();
       $('#productNotFound').hide()
       $('#registered').hide()
-      $('#formSubmit').bind("click",function(e){
+    $('#formSubmit').bind("click",function(e){
       e.preventDefault()
+      $('#error').hide();
+      $('#productNotFound').hide()
+      $('#registered').hide()
        if(validate()){
         $('#registration').hide()
         $('#registered').show()
@@ -209,6 +247,13 @@ return false;
     $('#error').html
 ("Please enter the Email");
 return false;
+  } else {
+    if(!isValidEmail(email)){
+      $('#error').show();
+    $('#error').html
+    ("Please enter a valid Email");
+    }
+    return false;
   }
   if (companyName.length == '') {
     $('#error').show();
@@ -240,7 +285,7 @@ return false;
     $('#error').html
     ("Please enter the issue");
 return false;
-  }
+  } 
   if (category.length == '') {
     $('#error').show();
     $('#error').html
@@ -256,9 +301,26 @@ return false;
   return true;
 }
 
+function isValidEmail(email) {
+  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  if(!regex.test(email)) {
+    return false;
+  }else{
+    return true;
+  }
+}
+
 $('#getProduct').click(function(e){
     e.preventDefault();
     console.log('hello');
+    $('#category').val("")
+    var issue = $('#issue').val();
+    if (issue.length == '') {
+    $('#error').show();
+    $('#error').html
+    ("Please enter the issue");
+    return ;
+  } 
     $.ajax({
          type:'POST',
          url:'/getProduct',
@@ -276,6 +338,15 @@ $('#getProduct').click(function(e){
          }
          }
       })
+});
+
+$(document).on({
+    ajaxStart: function(){
+        $("body").addClass("loading"); 
+    },
+    ajaxStop: function(){ 
+        $("body").removeClass("loading"); 
+    }    
 });
 
 
